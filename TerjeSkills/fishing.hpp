@@ -5,6 +5,8 @@ class Fishing: SkillsBase
 	displayName="#STR_TERJESKILL_FISHING_NAME";
 	description="#STR_TERJESKILL_FISHING_DESC";
 	icon="set:TerjeSkills_icon image:ts_fushing";
+	perkPointsPerLevel=0;
+	levels[]={150,350,600,900,1250,1675,2175,2775,3475,4275,5200,6250,7425,8725,10150,11725,13450,15325,17350,19525,21850,24325,26950,29725,32650};
 	class Modifiers
 	{
 		class CatchFishModifier
