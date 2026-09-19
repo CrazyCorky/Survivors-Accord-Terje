@@ -56,7 +56,11 @@ modded class ActionFishingNew
 				expGainValue = 2;
 			}
 			
-			if (player && player.GetTerjeSkills() && expGainValue > 0)\n\t\t\t{\n\t\t\t\tplayer.GetTerjeSkills().AddSkillExperience("fish", expGainValue);\n\t\t\t}		}
+			if (player && player.GetTerjeSkills() && expGainValue > 0)
+			{
+				player.GetTerjeSkills().AddSkillExperience("fish", expGainValue);
+			}
+		}
 		
 		return spawnExtraFish;
 	}
