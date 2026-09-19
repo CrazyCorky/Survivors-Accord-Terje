@@ -152,14 +152,13 @@ modded class TerjePlayerSkillsAccessor
 					
 					if (skillId == "fish")
 					{
-						int fishingMilestones[] = {3, 6, 10, 14, 18, 22, 25};
-						foreach (int fishingMilestone : fishingMilestones)
-						{
-							if (fishingMilestone > highRangeLevel && fishingMilestone <= newLevel)
-							{
-								perkPointsNew++;
-							}
-						}
+						if (highRangeLevel < 3 && newLevel >= 3) perkPointsNew++;
+						if (highRangeLevel < 6 && newLevel >= 6) perkPointsNew++;
+						if (highRangeLevel < 10 && newLevel >= 10) perkPointsNew++;
+						if (highRangeLevel < 14 && newLevel >= 14) perkPointsNew++;
+						if (highRangeLevel < 18 && newLevel >= 18) perkPointsNew++;
+						if (highRangeLevel < 22 && newLevel >= 22) perkPointsNew++;
+						if (highRangeLevel < 25 && newLevel >= 25) perkPointsNew++;
 					}
 					else
 					{
