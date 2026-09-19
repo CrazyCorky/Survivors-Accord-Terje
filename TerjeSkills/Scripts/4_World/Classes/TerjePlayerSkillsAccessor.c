@@ -147,8 +147,26 @@ modded class TerjePlayerSkillsAccessor
 				if (m_Player.GetTerjeProfile().GetSkillHighRangeLevel(skillId) < newLevel)
 				{
 					int perkPoints = m_Player.GetTerjeProfile().GetSkillPerkPoints(skillId);
-					int perkPointsPerLevel = skillCfg.GetPerkPointsPerLevel();
-					int perkPointsNew = perkPoints + ((newLevel - curLevel) * perkPointsPerLevel);
+					int highRangeLevel = m_Player.GetTerjeProfile().GetSkillHighRangeLevel(skillId);
+					int perkPointsNew = perkPoints;
+					
+					if (skillId == "fish")
+					{
+						int fishingMilestones[] = {3, 6, 10, 14, 18, 22, 25};
+						foreach (int fishingMilestone : fishingMilestones)
+						{
+							if (fishingMilestone > highRangeLevel && fishingMilestone <= newLevel)
+							{
+								perkPointsNew++;
+							}
+						}
+					}
+					else
+					{
+						int perkPointsPerLevel = skillCfg.GetPerkPointsPerLevel();
+						perkPointsNew += (newLevel - curLevel) * perkPointsPerLevel;
+					}
+					
 					m_Player.GetTerjeProfile().SetSkillPerkPoints(skillId, perkPointsNew);
 					m_Player.GetTerjeProfile().SetSkillHighRangeLevel(skillId, newLevel);
 					
