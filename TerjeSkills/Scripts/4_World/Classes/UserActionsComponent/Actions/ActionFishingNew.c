@@ -35,7 +35,7 @@ modded class ActionFishingNew
 			int expGainValue;
 			if (fishItem)
 			{
-				expGainValue = GetTerjeSettingInt(TerjeSettingsCollection.SKILLS_FISHING_SUCCESS_CATCH_EXP_GAIN);
+				expGainValue = 20;
 				
 				ItemBase resultItem = ItemBase.Cast(fishItem);
 				if (resultItem && resultItem.IsTerjeWholeFish())
@@ -53,23 +53,10 @@ modded class ActionFishingNew
 			}
 			else
 			{
-				expGainValue = GetTerjeSettingInt(TerjeSettingsCollection.SKILLS_FISHING_FAILED_CATCH_EXP_GAIN);
+				expGainValue = 2;
 			}
 			
-			if (player && player.GetTerjeSkills())
-			{
-				ItemBase fishingRod = player.GetItemInHands();
-				if (fishingRod && GetTerjeGameConfig().ConfigIsExisting("CfgVehicles " + fishingRod.GetType() + " terjeFishingExpModifier"))
-				{
-					expGainValue = (int)(expGainValue * GetTerjeGameConfig().ConfigGetFloat("CfgVehicles " + fishingRod.GetType() + " terjeFishingExpModifier"));
-				}
-				
-				if (expGainValue > 0)
-				{
-					player.GetTerjeSkills().AddSkillExperience("fish", expGainValue);
-				}
-			}
-		}
+			if (player && player.GetTerjeSkills() && expGainValue > 0)\n\t\t\t{\n\t\t\t\tplayer.GetTerjeSkills().AddSkillExperience("fish", expGainValue);\n\t\t\t}		}
 		
 		return spawnExtraFish;
 	}
