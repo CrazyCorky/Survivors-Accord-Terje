@@ -15,7 +15,6 @@ modded class PrepareFish
 	
 	override void Do(ItemBase ingredients[], PlayerBase player, array<ItemBase> results, float specialty_weight)
 	{
-		int incExp = 0;
 		ItemBase fishBody = ingredients[0];
 		ItemBase knifeItem = ingredients[1];
 		
@@ -44,19 +43,7 @@ modded class PrepareFish
 				}
 			}
 			
-			if (fishBody)
-			{
-				float huntingButchFishExpGainModifier;
-				if (GetTerjeSettingFloat(TerjeSettingsCollection.SKILLS_FISHING_BUTCH_EXP_GAIN_MODIFIER, huntingButchFishExpGainModifier))
-				{
-					int expCfg = GetTerjeGameConfig().ConfigGetInt("CfgVehicles " + fishBody.GetType() + " terjeOnButchFishingExp");
-					incExp = (int)(expCfg * huntingButchFishExpGainModifier);
-					if (knifeItem && GetTerjeGameConfig().ConfigIsExisting("CfgVehicles " + knifeItem.GetType() + " terjeSkinningExpModifier"))
-					{
-						incExp = (int)(incExp * GetTerjeGameConfig().ConfigGetFloat("CfgVehicles " + knifeItem.GetType() + " terjeSkinningExpModifier"));
-					}
-				}
-			}
+
 		}
 		
 		super.Do(ingredients, player, results, specialty_weight);
@@ -80,9 +67,9 @@ modded class PrepareFish
 				}
 			}
 			
-			if (incExp > 0)
+			if (fishBody)
 			{
-				player.GetTerjeSkills().AddSkillExperience("fish", incExp);
+				player.GetTerjeSkills().AddSkillExperience("fish", 8);
 			}
 		}
 	}
