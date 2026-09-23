@@ -19,7 +19,11 @@ class TerjePerkTooltip
 		m_perkTooltipInstance = g_Game.GetWorkspace().CreateWidgets("TerjeSkills/Layouts/TerjePerkTooltip.layout", ItemManager.GetInstance().GetTerjeSkillsRoot() );
 		m_perkTooltipInstance.Show(false);
 		
-		string info = perkCfg.GetDescription() + NEXT_LINE;	
+		string info = perkCfg.GetDescription() + NEXT_LINE;
+		if (perkCfg.IsSARAutomatic())
+		{
+			info += NEXT_LINE + COLOR_GREY + "<b>Passive Adaptation</b>" + COLOR_END;
+		}
 		if (perkActiveLevel > 0 && perkActiveLevel <= perkCfg.GetStagesCount())
 		{
 			float curValueRaw = perkCfg.GetValue(perkActiveLevel - 1);
@@ -34,8 +38,16 @@ class TerjePerkTooltip
 		{
 			float nextValueRaw = perkCfg.GetValue(perkLevel);
 			int nextSkillLevel = perkCfg.GetRequiredSkillLevel(perkLevel);
-			int nextPerkPoints = perkCfg.GetRequiredPerkPoints(perkLevel);
-			info += NEXT_LINE + "#STR_TERJESKILL_MISC5 " + COLOR_BLUE + nextPerkPoints + COLOR_END + " #STR_TERJESKILL_MISC6 " + COLOR_BLUE + nextSkillLevel + COLOR_END;
+
+			if (perkCfg.IsSARAutomatic())
+			{
+				info += NEXT_LINE + "Next adaptation stage: skill level " + COLOR_BLUE + nextSkillLevel + COLOR_END;
+			}
+			else
+			{
+				int nextPerkPoints = perkCfg.GetRequiredPerkPoints(perkLevel);
+				info += NEXT_LINE + "#STR_TERJESKILL_MISC5 " + COLOR_BLUE + nextPerkPoints + COLOR_END + " #STR_TERJESKILL_MISC6 " + COLOR_BLUE + nextSkillLevel + COLOR_END;
+			}
 			
 			if (nextValueRaw != 0)
 			{
@@ -66,32 +78,46 @@ class TerjePerkTooltip
 			}
 		}
 		
-		if (perkLevel == 0)
-		{
-			info += NEXT_LINE + NEXT_LINE + COLOR_GREY + "<b>#STR_TERJESKILL_MISC17</b>" + COLOR_END;
-		}
-		else if (perkActiveLevel == perkLevel && perkLevel > 0)
-		{
-			info += NEXT_LINE + NEXT_LINE + COLOR_GREEN + "<b>#STR_TERJESKILL_MISC8</b>" + COLOR_END;
-		}
-		else if (perkActiveLevel < perkLevel && perkLevel > 0)
+		if (perkCfg.IsSARAutomatic())
 		{
 			if (perkActiveLevel > 0)
 			{
-				int deactRequiredLevel = 0;
-				if (perkLevel > 0 && perkLevel <= perkCfg.GetStagesCount())
-				{
-					deactRequiredLevel = perkCfg.GetRequiredSkillLevel(perkLevel - 1);
-				}
-				
-				info += NEXT_LINE + NEXT_LINE + COLOR_RED + "<b>#STR_TERJESKILL_MISC10 (</b>" + COLOR_END + COLOR_GREY + deactRequiredLevel + COLOR_END + COLOR_RED + "<b>)</b>" + COLOR_END;
+				info += NEXT_LINE + NEXT_LINE + COLOR_GREEN + "<b>Adaptation active</b>" + COLOR_END;
 			}
 			else
 			{
-				info += NEXT_LINE + NEXT_LINE + COLOR_RED + "<b>#STR_TERJESKILL_MISC9</b>" + COLOR_END;
+				info += NEXT_LINE + NEXT_LINE + COLOR_GREY + "<b>Adaptation not yet developed</b>" + COLOR_END;
 			}
 		}
-		
+		else
+		{
+			if (perkLevel == 0)
+			{
+				info += NEXT_LINE + NEXT_LINE + COLOR_GREY + "<b>#STR_TERJESKILL_MISC17</b>" + COLOR_END;
+			}
+			else if (perkActiveLevel == perkLevel && perkLevel > 0)
+			{
+				info += NEXT_LINE + NEXT_LINE + COLOR_GREEN + "<b>#STR_TERJESKILL_MISC8</b>" + COLOR_END;
+			}
+			else if (perkActiveLevel < perkLevel && perkLevel > 0)
+			{
+				if (perkActiveLevel > 0)
+				{
+					int deactRequiredLevel = 0;
+					if (perkLevel > 0 && perkLevel <= perkCfg.GetStagesCount())
+					{
+						deactRequiredLevel = perkCfg.GetRequiredSkillLevel(perkLevel - 1);
+					}
+					
+					info += NEXT_LINE + NEXT_LINE + COLOR_RED + "<b>#STR_TERJESKILL_MISC10 (</b>" + COLOR_END + COLOR_GREY + deactRequiredLevel + COLOR_END + COLOR_RED + "<b>)</b>" + COLOR_END;
+				}
+				else
+				{
+					info += NEXT_LINE + NEXT_LINE + COLOR_RED + "<b>#STR_TERJESKILL_MISC9</b>" + COLOR_END;
+				}
+			}
+		}
+
 		if (canBeUpgraded)
 		{
 			info += NEXT_LINE + NEXT_LINE + COLOR_YELLOW + "<b>#STR_TERJESKILL_MISC11</b>" + COLOR_END;
@@ -100,7 +126,14 @@ class TerjePerkTooltip
 		ImageWidget.Cast(m_perkTooltipInstance.FindAnyWidget("terje_perk_tooltip_icon")).LoadImageFile(0, perkCfg.GetEnabledIcon());
 		TextWidget.Cast(m_perkTooltipInstance.FindAnyWidget("terje_perk_tooltip_name")).SetText(perkCfg.GetDisplayName());
 		TextWidget.Cast(m_perkTooltipInstance.FindAnyWidget("terje_perk_tooltip_info")).SetText(info);
-		TextWidget.Cast(m_perkTooltipInstance.FindAnyWidget("terje_perk_tooltip_level")).SetText("#STR_TERJESKILL_MISC12: " + perkLevel.ToString() + "/" + perkCfg.GetStagesCount().ToString());
+		if (perkCfg.IsSARAutomatic())
+		{
+			TextWidget.Cast(m_perkTooltipInstance.FindAnyWidget("terje_perk_tooltip_level")).SetText("Passive Adaptation: " + perkLevel.ToString() + "/" + perkCfg.GetStagesCount().ToString());
+		}
+		else
+		{
+			TextWidget.Cast(m_perkTooltipInstance.FindAnyWidget("terje_perk_tooltip_level")).SetText("#STR_TERJESKILL_MISC12: " + perkLevel.ToString() + "/" + perkCfg.GetStagesCount().ToString());
+		}
 		
 		m_perkTooltipInstance.FindAnyWidget("terje_perk_tooltip_content_spacer").Update();
 		m_perkTooltipInstance.FindAnyWidget("terje_perk_tooltip_content").Update();
