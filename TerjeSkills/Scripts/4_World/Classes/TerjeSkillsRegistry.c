@@ -129,10 +129,42 @@ modded class TerjeSkillCfg
 
 modded class TerjePerkCfg
 {
+	private bool m_SARAutomatic;
+
+	bool IsSARAutomatic()
+	{
+		return m_SARAutomatic;
+	}
+
+	int GetSARAutomaticStageForSkillLevel(int skillLevel)
+	{
+		if (!m_SARAutomatic)
+		{
+			return 0;
+		}
+
+		int result = 0;
+		for (int i = 0; i < m_stagesCount; i++)
+		{
+			if (skillLevel >= GetRequiredSkillLevel(i))
+			{
+				result = i + 1;
+			}
+		}
+
+		return result;
+	}
+
 	override void OnInit()
 	{
 		super.OnInit();
 		
+		m_SARAutomatic = false;
+		if (GetTerjeGameConfig().ConfigIsExisting(m_cfgPath + " automatic"))
+		{
+			m_SARAutomatic = (GetTerjeGameConfig().ConfigGetInt(m_cfgPath + " automatic") == 1);
+		}
+
 		m_id = GetTerjeGameConfig().ConfigGetTextOut(m_cfgPath + " id");
 		m_displayName = GetTerjeGameConfig().ConfigGetTextOut(m_cfgPath + " displayName");
 		m_description = GetTerjeGameConfig().ConfigGetTextOut(m_cfgPath + " description");
