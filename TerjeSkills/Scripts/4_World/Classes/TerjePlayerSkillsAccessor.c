@@ -304,6 +304,11 @@ modded class TerjePlayerSkillsAccessor
 		{
 			return;
 		}
+
+		if (perkCfg.IsSARAutomatic())
+		{
+			return;
+		}
 		
 		if (level < 0)
 		{
@@ -337,6 +342,11 @@ modded class TerjePlayerSkillsAccessor
 		
 		ref TerjePerkCfg perkCfg;
 		if (!skillCfg.FindPerk(perkId, perkCfg))
+		{
+			return;
+		}
+
+		if (perkCfg.IsSARAutomatic())
 		{
 			return;
 		}
@@ -392,6 +402,13 @@ modded class TerjePlayerSkillsAccessor
 		{
 			return 0;
 		}
+
+		int currentSkillExp = m_Player.GetTerjeProfile().GetSkillExperience(skillId);
+		int currentSkillLevel = skillCfg.GetLevelFromExp(currentSkillExp);
+		if (perkCfg.IsSARAutomatic())
+		{
+			return perkCfg.GetSARAutomaticStageForSkillLevel(currentSkillLevel);
+		}
 		
 		int perkLevel = m_Player.GetTerjeProfile().GetSkillPerk(skillId, perkId);
 		if (perkLevel < 0)
@@ -403,8 +420,6 @@ modded class TerjePlayerSkillsAccessor
 			perkLevel = perkCfg.GetStagesCount();
 		}
 		
-		int currentSkillExp = m_Player.GetTerjeProfile().GetSkillExperience(skillId);
-		int currentSkillLevel = skillCfg.GetLevelFromExp(currentSkillExp);
 		for (int i = perkLevel; i > 0; i--)
 		{
 			int requiredSkillLevel = perkCfg.GetRequiredSkillLevel(i - 1);
@@ -443,6 +458,21 @@ modded class TerjePlayerSkillsAccessor
 			result = 0;
 			return false;
 		}
+
+		int currentSkillExp = m_Player.GetTerjeProfile().GetSkillExperience(skillId);
+		int currentSkillLevel = skillCfg.GetLevelFromExp(currentSkillExp);
+		if (perkCfg.IsSARAutomatic())
+		{
+			int automaticStage = perkCfg.GetSARAutomaticStageForSkillLevel(currentSkillLevel);
+			if (automaticStage > 0)
+			{
+				result = perkCfg.GetValue(automaticStage - 1);
+				return true;
+			}
+
+			result = 0;
+			return false;
+		}
 		
 		int perkLevel = m_Player.GetTerjeProfile().GetSkillPerk(skillId, perkId);
 		if (perkLevel < 0)
@@ -460,8 +490,6 @@ modded class TerjePlayerSkillsAccessor
 			return false;
 		}
 		
-		int currentSkillExp = m_Player.GetTerjeProfile().GetSkillExperience(skillId);
-		int currentSkillLevel = skillCfg.GetLevelFromExp(currentSkillExp);
 		for (int i = perkLevel; i > 0; i--)
 		{
 			int requiredSkillLevel = perkCfg.GetRequiredSkillLevel(i - 1);
@@ -506,6 +534,15 @@ modded class TerjePlayerSkillsAccessor
 		
 		int currentSkillExp = m_Player.GetTerjeProfile().GetSkillExperience(skillId);
 		int currentSkillLevel = skillCfg.GetLevelFromExp(currentSkillExp);
+
+		if (perkCfg.IsSARAutomatic())
+		{
+			perkLevel = perkCfg.GetSARAutomaticStageForSkillLevel(currentSkillLevel);
+			activePerkLevel = perkLevel;
+			canBeUpgraded = false;
+			return;
+		}
+
 		perkLevel = m_Player.GetTerjeProfile().GetSkillPerk(skillId, perkId);
 		
 		for (int i = perkLevel; i > 0; i--)
