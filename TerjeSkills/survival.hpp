@@ -62,27 +62,29 @@ class Survival: SkillsBase
 		{
 			id="rghfeet";
 			enabled=1;
-			displayName="#STR_TERJESKILL_SURV_ROUGHFEET";
-			description="#STR_TERJESKILL_SURV_ROUGHFEET_DES";
-			stagesCount=6;
+			automatic=1;
+			displayName="Foot Conditioning";
+			description="Passive adaptation from prolonged wilderness travel. Reduces the chance of foot cuts when exposed, but never makes bare feet safe.";
+			stagesCount=3;
 			disabledIcon="set:TerjePerkBlack_icon image:tp_roughfeet";
 			enabledIcon="set:TerjePerk_icon image:tp_roughfeet";
-			requiredSkillLevels[]={1,5,10,15,20,25};
-			requiredPerkPoints[]={1,1,1,1,1,2};
-			values[]={-0.1,-0.2,-0.4,-0.6,-0.8,-1.0};
+			requiredSkillLevels[]={8,15,24};
+			requiredPerkPoints[]={0,0,0};
+			values[]={-0.10,-0.20,-0.30};
 		};
 		class RoughHands
 		{
 			id="rghhands";
 			enabled=1;
-			displayName="#STR_TERJESKILL_SURV_ROUGHHANDS";
-			description="#STR_TERJESKILL_SURV_ROUGHHANDS_DES";
-			stagesCount=6;
+			automatic=1;
+			displayName="Hand Conditioning";
+			description="Passive adaptation from repeated fieldwork. Reduces the chance of hand and forearm cuts during exposed work, but never provides immunity.";
+			stagesCount=3;
 			disabledIcon="set:TerjePerkBlack_icon image:tp_roughhands";
 			enabledIcon="set:TerjePerk_icon image:tp_roughhands";
-			requiredSkillLevels[]={1,5,10,15,20,25};
-			requiredPerkPoints[]={1,1,1,1,1,2};
-			values[]={-0.1,-0.2,-0.4,-0.6,-0.8,-1.0};
+			requiredSkillLevels[]={8,15,24};
+			requiredPerkPoints[]={0,0,0};
+			values[]={-0.10,-0.20,-0.30};
 		};
 		class AncestralTechnologies
 		{
