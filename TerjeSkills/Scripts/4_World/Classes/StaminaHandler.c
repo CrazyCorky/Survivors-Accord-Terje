@@ -119,7 +119,7 @@ modded class StaminaHandler
 					athleticPerkModifier = 0;
 				}
 				
-				float athleticGlobalStaminaModifier = athleticSkillModifier + (athleticPerkModifier * 3);
+				float athleticGlobalStaminaModifier = athleticSkillModifier + athleticPerkModifier;
 				float newMaxStaminaModifier = Math.Max(1.0, athleticGlobalStaminaModifier + 1.0);
 				if (m_terjeMaxStaminaModifier != newMaxStaminaModifier)
 				{
