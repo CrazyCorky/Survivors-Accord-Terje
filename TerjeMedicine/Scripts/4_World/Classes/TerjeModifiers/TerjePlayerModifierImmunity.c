@@ -21,7 +21,7 @@ class TerjePlayerModifierImmunity : TerjePlayerModifierBase
 			{
 				m_SARLastImmunityLevel = sarImmunityLevel;
 				m_SARLastDiseaseResistance = sarDiseaseResistance;
-				TerjeLog_Info("[SAR IMMUNITY TEST] Level=" + sarImmunityLevel.ToString() + " DiseaseResistance=" + sarDiseaseResistance.ToString());
+				TerjeLog_Info("[SAR IMMUNITY TEST] Level=" + sarImmunityLevel + " DiseaseResistance=" + sarDiseaseResistance);
 			}
 		}
 		
