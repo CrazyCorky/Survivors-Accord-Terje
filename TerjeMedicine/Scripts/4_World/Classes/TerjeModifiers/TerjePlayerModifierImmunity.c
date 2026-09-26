@@ -1,6 +1,8 @@
 class TerjePlayerModifierImmunity : TerjePlayerModifierBase
 {
 	protected float m_skillExpGainTimer = 0;
+	private int m_SARLastImmunityLevel = -1;
+	private float m_SARLastDiseaseResistance = -1;
 	
 	override float GetTimeout()
 	{
@@ -10,6 +12,18 @@ class TerjePlayerModifierImmunity : TerjePlayerModifierBase
 	override void OnServerFixedTick(PlayerBase player, float deltaTime)
 	{
 		super.OnServerFixedTick(player, deltaTime);
+		
+		if (player.GetTerjeSkills())
+		{
+			int sarImmunityLevel = player.GetTerjeSkills().GetSkillLevel("immunity");
+			float sarDiseaseResistance = GetPlayerImmunity(player);
+			if (sarImmunityLevel != m_SARLastImmunityLevel || Math.AbsFloat(sarDiseaseResistance - m_SARLastDiseaseResistance) > 0.0001)
+			{
+				m_SARLastImmunityLevel = sarImmunityLevel;
+				m_SARLastDiseaseResistance = sarDiseaseResistance;
+				TerjeLog_Info("[SAR IMMUNITY TEST] Level=" + sarImmunityLevel.ToString() + " DiseaseResistance=" + sarDiseaseResistance.ToString());
+			}
+		}
 		
 		float gainForce;
 		float gainTime;
