@@ -1,0 +1,57 @@
+name: SAR Package TerjeMedicine
+
+on:
+  push:
+    branches:
+      - feature/sar-immunity-resistance-fix
+    paths:
+      - ".github/workflows/sar-package-terjemedicine.yml"
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v4
+
+      - name: Stage full TerjeMedicine source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p package
+          cp -a TerjeMedicine package/TerjeMedicine
+          cp LICENSE.md package/LICENSE.md
+          cat > package/README_SAR_IMMUNITY_DIAGNOSTIC.txt <<'EOF'
+SAR TerjeMedicine - Immunity Checkpoint A Diagnostic
+
+This is the complete TerjeMedicine source tree from:
+feature/sar-immunity-resistance-fix
+
+Checkpoint A changes:
+1. TerjePlayerModifierBase.c
+   - Fixes general Immunity disease-resistance lookup by reading
+     resdiseasesmod as a skill modifier instead of incorrectly testing it as a perk.
+
+2. TerjePlayerModifierImmunity.c
+   - Adds a temporary diagnostic that logs the resolved Immunity level
+     and DiseaseResistance when either value changes.
+
+Expected values with resdiseasesmod=0.01:
+Level 0  -> 0.00
+Level 5  -> 0.05
+Level 10 -> 0.10
+Level 15 -> 0.15
+Level 25 -> 0.25
+
+Temporary diagnostic. Remove it after verification.
+EOF
+
+      - name: Upload full source package
+        uses: actions/upload-artifact@v4
+        with:
+          name: SAR_Immunity_Checkpoint_A_Diagnostic_Full_TerjeMedicine
+          path: package/
+          compression-level: 6
+          if-no-files-found: error
